@@ -9,4 +9,5 @@ public interface AuthService {
   void signup(UserSignUpTarget userSignUpTarget);
   TokenResponseDto login(UserLoginTarget userLoginTarget);
   TokenResponseDto reissue(TokenRequestDto tokenRequestDto);
+  boolean checkDuplicateUserId(String userId);
 }
