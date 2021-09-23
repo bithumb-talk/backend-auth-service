@@ -89,5 +89,10 @@ public class AuthServiceImpl implements AuthService{
         return TokenResponseDto.of(id,tokenDto);
     }
 
+    @Override
+    public boolean checkDuplicateUserId(String userId){
+        return userRepository.existsByUserId(userId);
+    }
+
 
 }
