@@ -10,4 +10,5 @@ public interface AuthService {
   TokenResponseDto login(UserLoginTarget userLoginTarget);
   TokenResponseDto reissue(TokenRequestDto tokenRequestDto);
   boolean checkDuplicateUserId(String userId);
+  boolean checkDuplicateNickname(String nickname);
 }

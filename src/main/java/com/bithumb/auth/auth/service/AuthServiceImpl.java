@@ -94,5 +94,9 @@ public class AuthServiceImpl implements AuthService{
         return userRepository.existsByUserId(userId);
     }
 
+    @Override
+    public boolean checkDuplicateNickname(String nickname){
+        return userRepository.existsByNickname(nickname);
+    }
 
 }
