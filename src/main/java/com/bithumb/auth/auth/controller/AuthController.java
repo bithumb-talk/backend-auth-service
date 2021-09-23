@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +49,21 @@ public class AuthController {
         TokenResponseDto tokenDto = authService.reissue(tokenRequestDto);
         ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
             SuccessCode.USER_REFRESH_SUCCESS.getMessage(),tokenDto);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/check-duplicate-user-id/{user-id}")
+    public ResponseEntity<?> checkDuplicateId(@Valid @PathVariable("user-id") String userId) {
+        boolean result = authService.checkDuplicateUserId(userId);
+
+        if(result){
+            ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+                SuccessCode.USER_ID_ALREADY_EXIST.getMessage(),!result);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+
+        ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+            SuccessCode.USER_ID_REGISTER_POSSIBLE.getMessage(),!result);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
