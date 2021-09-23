@@ -67,4 +67,19 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @GetMapping("/check-duplicate-nickname/{nickname}")
+    public ResponseEntity<?> checkNickname(@Valid @PathVariable String nickname) {
+        boolean result = authService.checkDuplicateNickname(nickname);
+
+        if(result){
+            ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+                SuccessCode.NICKNAME_ALREADY_EXIST.getMessage(),!result);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+
+        ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+            SuccessCode.NICKNAME_REGISTER_POSSIBLE.getMessage(),!result);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
 }
