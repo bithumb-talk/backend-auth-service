@@ -1,6 +1,7 @@
 package com.bithumb.auth.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,6 @@ public class ApiResponse<T> {
 	public static ApiResponse responseList(StatusCode status, String message, List data) {
 		return new ApiResponse(status, message, data);
 	}
-
 
 	public static ApiResponse responseError(StatusCode status, Map message) {
 		return new ApiResponse(status, message);

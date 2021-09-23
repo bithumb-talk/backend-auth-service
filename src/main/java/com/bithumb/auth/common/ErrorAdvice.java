@@ -1,10 +1,10 @@
 package com.bithumb.auth.common;
 
-import com.tutorial.jwtsecurity.common.response.ApiResponse;
-import com.tutorial.jwtsecurity.common.response.StatusCode;
 import java.util.HashMap;
 import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.bithumb.auth.common.response.ApiResponse;
+import com.bithumb.auth.common.response.StatusCode;
+
 @Slf4j
 @RestControllerAdvice
 public class ErrorAdvice {
-
 
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> illegalExHandler(IllegalArgumentException e) {
@@ -24,20 +26,17 @@ public class ErrorAdvice {
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
 
-
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> runtimeException(DuplicateKeyException e) {
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.FAIL, e.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
 
-
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> nullPointerHandler(NullPointerException e) {
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.FAIL, e.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
-
 
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> methodArgumentNotValidHandler(MethodArgumentNotValidException e) {
@@ -53,13 +52,11 @@ public class ErrorAdvice {
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
 
-
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> exceptionHandler(Exception e) {
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.FAIL, e.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
-
 
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> secureExceptionHandler(SecurityException e) {
