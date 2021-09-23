@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bithumb.auth.auth.controller.dto.TokenResponseDto;
 import com.bithumb.auth.auth.controller.dto.UserLoginRequest;
+import com.bithumb.auth.auth.controller.dto.UserSignUpRequest;
 import com.bithumb.auth.auth.service.AuthService;
 import com.bithumb.auth.common.response.ApiResponse;
 import com.bithumb.auth.common.response.StatusCode;
@@ -23,6 +24,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody UserSignUpRequest userSignUpRequest) {
+        authService.signup(userSignUpRequest.toParam());
+        ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
+            SuccessCode.USER_SIGN_UP_SUCCESS.getMessage());
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginRequest userLoginRequest) {

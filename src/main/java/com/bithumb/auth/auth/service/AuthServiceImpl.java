@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bithumb.auth.auth.controller.dto.TokenDto;
 import com.bithumb.auth.auth.controller.dto.TokenResponseDto;
 import com.bithumb.auth.auth.controller.dto.UserLoginTarget;
+import com.bithumb.auth.auth.controller.dto.UserSignUpTarget;
 import com.bithumb.auth.auth.entity.RefreshToken;
 import com.bithumb.auth.auth.repository.RefreshTokenRepository;
 import com.bithumb.auth.common.response.ErrorCode;
@@ -30,6 +31,19 @@ public class AuthServiceImpl implements AuthService{
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Override
+    public void signup(UserSignUpTarget userSignUpTarget) {
+
+        if (userRepository.existsByUserId(userSignUpTarget.getUserId())) {
+            throw new DuplicateKeyException(ErrorCode.ID_ALREADY_EXIST.getMessage());
+        }
+        if (userRepository.existsByNickname(userSignUpTarget.getNickname())) {
+            throw new DuplicateKeyException(ErrorCode.NICKNAME_ALREADY_EXIST.getMessage());
+        }
+
+        User user = userSignUpTarget.toEntity(passwordEncoder);
+        userRepository.save(user);
+    }
 
     @Override
     public TokenResponseDto login(UserLoginTarget userLoginTarget) {
