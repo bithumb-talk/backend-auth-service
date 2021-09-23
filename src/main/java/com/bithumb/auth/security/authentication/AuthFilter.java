@@ -1,4 +1,4 @@
-package com.bithumb.auth.security;
+package com.bithumb.auth.security.authentication;
 
 import java.io.IOException;
 
@@ -6,7 +6,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -28,14 +27,13 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
         String jwt = resolveToken(request);
-        System.out.println("필터 " + jwt);
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // AuthInfo authInfo = AuthInfo.UserOf(Long.parseLong(authentication.getName())); ;
-            // AuthInfoAttributeUtils.setAuthInfoAttributes(request, authInfo);
+            AuthInfo authInfo = AuthInfo.UserOf(Long.parseLong(authentication.getName())); ;
+            AuthInfoAttributeUtils.setAuthInfoAttributes(request, authInfo);
         }
 
         filterChain.doFilter(request, response);
