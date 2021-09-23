@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bithumb.auth.auth.controller.dto.TokenRequestDto;
 import com.bithumb.auth.auth.controller.dto.TokenResponseDto;
 import com.bithumb.auth.auth.controller.dto.UserLoginRequest;
 import com.bithumb.auth.auth.controller.dto.UserSignUpRequest;
@@ -40,4 +41,13 @@ public class AuthController {
             SuccessCode.USER_LOGIN_SUCCESS.getMessage(),tokenDto);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
+        TokenResponseDto tokenDto = authService.reissue(tokenRequestDto);
+        ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+            SuccessCode.USER_REFRESH_SUCCESS.getMessage(),tokenDto);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
 }
