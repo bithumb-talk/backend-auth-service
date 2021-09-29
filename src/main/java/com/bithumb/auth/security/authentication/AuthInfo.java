@@ -1,6 +1,6 @@
 package com.bithumb.auth.security.authentication;
 
-import com.bithumb.auth.user.entity.Authority;
+import com.bithumb.auth.user.domain.Authority;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

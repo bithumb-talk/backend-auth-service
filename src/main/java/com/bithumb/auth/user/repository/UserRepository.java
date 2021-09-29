@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bithumb.auth.user.entity.User;
+import com.bithumb.auth.user.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

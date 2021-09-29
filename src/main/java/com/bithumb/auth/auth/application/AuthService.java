@@ -1,9 +1,9 @@
-package com.bithumb.auth.auth.service;
+package com.bithumb.auth.auth.application;
 
-import com.bithumb.auth.auth.controller.dto.TokenRequestDto;
-import com.bithumb.auth.auth.controller.dto.TokenResponseDto;
-import com.bithumb.auth.auth.controller.dto.UserLoginTarget;
-import com.bithumb.auth.auth.controller.dto.UserSignUpTarget;
+import com.bithumb.auth.auth.api.dto.TokenRequestDto;
+import com.bithumb.auth.auth.api.dto.TokenResponseDto;
+import com.bithumb.auth.auth.api.dto.UserLoginTarget;
+import com.bithumb.auth.auth.api.dto.UserSignUpTarget;
 
 public interface AuthService {
   void signup(UserSignUpTarget userSignUpTarget);

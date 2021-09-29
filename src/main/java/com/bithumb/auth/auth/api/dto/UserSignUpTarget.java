@@ -1,9 +1,9 @@
-package com.bithumb.auth.auth.controller.dto;
+package com.bithumb.auth.auth.api.dto;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.bithumb.auth.user.entity.Authority;
-import com.bithumb.auth.user.entity.User;
+import com.bithumb.auth.user.domain.Authority;
+import com.bithumb.auth.user.domain.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
