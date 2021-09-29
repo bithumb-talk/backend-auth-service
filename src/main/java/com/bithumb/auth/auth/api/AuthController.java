@@ -1,4 +1,4 @@
-package com.bithumb.auth.auth.controller;
+package com.bithumb.auth.auth.api;
 
 import javax.validation.Valid;
 
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bithumb.auth.auth.controller.dto.TokenRequestDto;
-import com.bithumb.auth.auth.controller.dto.TokenResponseDto;
-import com.bithumb.auth.auth.controller.dto.UserLoginRequest;
-import com.bithumb.auth.auth.controller.dto.UserSignUpRequest;
-import com.bithumb.auth.auth.service.AuthService;
+import com.bithumb.auth.auth.api.dto.TokenRequestDto;
+import com.bithumb.auth.auth.api.dto.TokenResponseDto;
+import com.bithumb.auth.auth.api.dto.UserLoginRequest;
+import com.bithumb.auth.auth.api.dto.UserSignUpRequest;
+import com.bithumb.auth.auth.application.AuthService;
 import com.bithumb.auth.common.response.ApiResponse;
 import com.bithumb.auth.common.response.StatusCode;
 import com.bithumb.auth.common.response.SuccessCode;

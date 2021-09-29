@@ -3,7 +3,7 @@ package com.bithumb.auth.auth.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bithumb.auth.auth.entity.RefreshToken;
+import com.bithumb.auth.auth.domain.RefreshToken;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {

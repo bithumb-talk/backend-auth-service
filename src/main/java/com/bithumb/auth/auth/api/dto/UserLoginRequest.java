@@ -1,4 +1,4 @@
-package com.bithumb.auth.auth.controller.dto;
+package com.bithumb.auth.auth.api.dto;
 
 import javax.validation.constraints.NotBlank;
 

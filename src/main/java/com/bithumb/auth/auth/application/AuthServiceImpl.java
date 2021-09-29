@@ -1,4 +1,4 @@
-package com.bithumb.auth.auth.service;
+package com.bithumb.auth.auth.application;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,16 +8,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bithumb.auth.auth.controller.dto.TokenDto;
-import com.bithumb.auth.auth.controller.dto.TokenRequestDto;
-import com.bithumb.auth.auth.controller.dto.TokenResponseDto;
-import com.bithumb.auth.auth.controller.dto.UserLoginTarget;
-import com.bithumb.auth.auth.controller.dto.UserSignUpTarget;
-import com.bithumb.auth.auth.entity.RefreshToken;
+import com.bithumb.auth.auth.api.dto.TokenDto;
+import com.bithumb.auth.auth.api.dto.TokenRequestDto;
+import com.bithumb.auth.auth.api.dto.TokenResponseDto;
+import com.bithumb.auth.auth.api.dto.UserLoginTarget;
+import com.bithumb.auth.auth.api.dto.UserSignUpTarget;
+import com.bithumb.auth.auth.domain.RefreshToken;
 import com.bithumb.auth.auth.repository.RefreshTokenRepository;
 import com.bithumb.auth.common.response.ErrorCode;
 import com.bithumb.auth.security.jwt.TokenProvider;
-import com.bithumb.auth.user.entity.User;
+import com.bithumb.auth.user.domain.User;
 import com.bithumb.auth.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

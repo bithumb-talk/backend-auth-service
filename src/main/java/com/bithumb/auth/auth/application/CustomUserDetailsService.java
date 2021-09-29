@@ -1,4 +1,4 @@
-package com.bithumb.auth.auth.service;
+package com.bithumb.auth.auth.application;
 
 import java.util.Collections;
 
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bithumb.auth.user.entity.User;
+import com.bithumb.auth.user.domain.User;
 import com.bithumb.auth.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.bithumb.auth.auth.controller.dto.TokenDto;
+import com.bithumb.auth.auth.api.dto.TokenDto;
 import com.bithumb.auth.common.response.ErrorCode;
 
 import io.jsonwebtoken.*;

@@ -1,4 +1,4 @@
-package com.bithumb.auth.auth.entity;
+package com.bithumb.auth.auth.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
