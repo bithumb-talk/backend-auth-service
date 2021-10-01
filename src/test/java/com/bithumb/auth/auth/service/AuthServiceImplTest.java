@@ -1,9 +1,13 @@
 package com.bithumb.auth.auth.service;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,12 +17,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bithumb.auth.auth.api.dto.TokenDto;
 import com.bithumb.auth.auth.api.dto.TokenRequestDto;
+import com.bithumb.auth.auth.api.dto.TokenResponseDto;
 import com.bithumb.auth.auth.api.dto.UserLoginTarget;
 import com.bithumb.auth.auth.api.dto.UserSignUpTarget;
 import com.bithumb.auth.auth.application.AuthServiceImpl;
@@ -93,7 +100,16 @@ class AuthServiceImplTest {
 			"eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzI1MDE4MjR9.ZiWYYiaIElyvaLY8T0YXBqKM5GX-H-2hfFNR0-emaYMmuaigUM15xW6Gpo84530zNksbaVviagj5EDr9FsoC9Q")
 		.build();
 
-	private GrantedAuthority user1;
+	//dto
+	TokenResponseDto resultInput = TokenResponseDto.builder()
+		.id(1l)
+		.grantType("bearer")
+		.accessToken(
+			"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYzMTg5ODgyNH0.rU3GBd4QGwXE0DprckBXmpvNM36YLS3Gk5DUd-CmxgD7o6mF3IjNo4OXlQ2v2XMzaAONfoc73g1hH3mwGU1E6A")
+		.refreshToken(
+			"eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzI1MDE4MjR9.ZiWYYiaIElyvaLY8T0YXBqKM5GX-H-2hfFNR0-emaYMmuaigUM15xW6Gpo84530zNksbaVviagj5EDr9FsoC9Q")
+		.accessTokenExpiresIn(604800l)
+		.build();
 
 	@BeforeEach
 	void setUp() {
@@ -135,26 +151,29 @@ class AuthServiceImplTest {
 		assertThrows(DuplicateKeyException.class, () -> authService.signup(signUpTarget));
 	}
 
-/*	@Test
+	@Test
 	@DisplayName("성공테스트 - 로그인")
 	void login() {
 		// given
-		//given(userRepository.findByUserId(any())).willReturn(Optional.ofNullable(user));
-		//given(refreshTokenRepository.save(any())).willReturn(refreshToken);
+		Authentication authentication = new UsernamePasswordAuthenticationToken("1", "password");
+		given(userRepository.findByUserId(any())).willReturn(Optional.ofNullable(user));
+		given(tokenProvider.generateTokenDto(any())).willReturn(tokenDto);
+		given(refreshTokenRepository.save(any())).willReturn(refreshToken);
+		given(authenticationManagerBuilder.getObject().authenticate(authentication));
 
-		System.out.println(loginTarget.toString());
 		// when
-		UsernamePasswordAuthenticationToken authenticationToken = loginTarget.toAuthentication();
-		System.out.println(authenticationToken);
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		System.out.println(authentication);
-		//then
-		//then(refreshTokenRepository).should(times(1)).save(any());
-	}*/
+		TokenResponseDto resultOutput = authService.login(loginTarget);
 
-	//UserLoginTarget(userId=bithumb10, password=bithumb10)
-	//UsernamePasswordAuthenticationToken [Principal=bithumb10, Credentials=[PROTECTED], Authenticated=false, Details=null, Granted Authorities=[]]
-	//UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=12, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, credentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]
+		// then
+		assertThat(resultInput, is(resultOutput));
+
+		then(userRepository).should(times(1)).findByUserId(any());
+		then(tokenProvider).should(times(1)).generateTokenDto(any());
+		then(refreshTokenRepository).should(times(1)).save(any());
+		then(authenticationManagerBuilder).should(times(1)).getObject().authenticate(any());
+
+	}
+
 
 	@Test
 	@DisplayName("실패테스트 - 로그인 아이디 존재x")
@@ -166,11 +185,31 @@ class AuthServiceImplTest {
 	}
 
 
-/*	@Test
+	@Test
+	@DisplayName("성공테스트 - 토큰 재발급")
 	void reissue() {
-		Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
-		System.out.println(authentication);
-	}*/
+		Authentication authentication = new UsernamePasswordAuthenticationToken("1", "password");
+
+		// given
+		given(tokenProvider.validateToken(any())).willReturn(true);
+		given(tokenProvider.getAuthentication(any())).willReturn(authentication);
+		given(tokenProvider.generateTokenDto(any())).willReturn(tokenDto);
+		given(refreshTokenRepository.findById(any())).willReturn(Optional.ofNullable(refreshToken));
+		given(refreshTokenRepository.save(any())).willReturn(refreshToken);
+
+		// when
+		TokenResponseDto resultOutput = authService.reissue(tokenRequestDto);
+
+		// then
+		assertThat(resultInput, is(resultOutput));
+
+		then(tokenProvider).should(times(1)).validateToken(any());
+		then(tokenProvider).should(times(1)).getAuthentication(any());
+		then(tokenProvider).should(times(1)).generateTokenDto(any());
+		then(refreshTokenRepository).should(times(1)).findById(any());
+		then(refreshTokenRepository).should(times(1)).save(any());
+
+	}
 
 	@Test
 	@DisplayName("실패테스트 - 토큰 재발급 아이디 존재x")

@@ -5,6 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bithumb.auth.auth.repository.RefreshTokenRepository;
@@ -346,6 +350,31 @@ class UserServiceImplTest {
 
 		// then
 		assertThrows(SecurityException.class, () -> userService.deleteUser(faildeleteUser, authInfo));
+	}
+
+	@Test
+	@DisplayName("성공테스트 - 유저 프로필 등록")
+	void saveUserProfile() throws IOException {
+		Optional<User> optionalUser = Optional.ofNullable(user);
+		String fileName = "testCustomerUpload";
+		String contentType = "image/jpeg";
+		String filePath = "C:\\Users\\ensu7\\Downloads\\image.png";
+		MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
+		String resultImg = "https://youngcha-auth-service.s3.ap-northeast-2.amazonaws.com/user/1";
+
+		// given
+		given(userRepository.findById(any())).willReturn(optionalUser);
+		given(s3Uploader.upload(mockMultipartFile,1l)).willReturn(resultImg);
+		// when
+		userService.saveProfileImg(1l,mockMultipartFile);
+
+		//then
+		then(userRepository).should(times(1)).saveUserProfileImg(1l,resultImg);
+	}
+
+	private MockMultipartFile getMockMultipartFile(String fileName, String contentType, String path) throws IOException {
+		FileInputStream fileInputStream = new FileInputStream(new File(path));
+		return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
 	}
 
 }
