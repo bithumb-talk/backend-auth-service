@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8080
 
 spring:
   datasource:
@@ -16,6 +16,18 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
         show_sql: true
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA2SJCWGIOHZXVYN5I
+      secretKey: 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
+    s3:
+      bucket: youngcha-auth-service
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 logging:
   level:
