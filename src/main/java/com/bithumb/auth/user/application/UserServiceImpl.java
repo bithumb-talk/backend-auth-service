@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bithumb.auth.auth.repository.RefreshTokenRepository;
 import com.bithumb.auth.common.response.ErrorCode;
 import com.bithumb.auth.security.authentication.AuthInfo;
+import com.bithumb.auth.user.api.dto.DeleteUserTarget;
 import com.bithumb.auth.user.api.dto.ModifyNicknameTarget;
 import com.bithumb.auth.user.api.dto.ModifyPasswordTarget;
 import com.bithumb.auth.user.api.dto.UserResponseDto;
@@ -38,6 +39,17 @@ public class UserServiceImpl implements UserService {
 		User user = findUserById(target.getId());
 		user.changeNickname(target.getNickname());
 		return UserResponseDto.of(userRepository.save(user));
+	}
+
+	@Override
+	public void deleteUser(DeleteUserTarget target, AuthInfo authInfo) {
+		User user = findUserById(authInfo.getId());
+
+		validUser(target.getId(), authInfo.getId());
+		validPassword(target.getPassword(),user.getPassword());
+
+		userRepository.deleteById(target.getId());
+		refreshTokenRepository.deleteById(String.valueOf(target.getId()));
 	}
 
 	private User findUserById(Long id) {
