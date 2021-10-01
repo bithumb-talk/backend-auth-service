@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bithumb.auth.auth.repository.RefreshTokenRepository;
 import com.bithumb.auth.common.response.ErrorCode;
 import com.bithumb.auth.security.authentication.AuthInfo;
+import com.bithumb.auth.user.api.dto.ModifyNicknameTarget;
 import com.bithumb.auth.user.api.dto.ModifyPasswordTarget;
 import com.bithumb.auth.user.api.dto.UserResponseDto;
 import com.bithumb.auth.user.domain.User;
@@ -28,6 +29,14 @@ public class UserServiceImpl implements UserService {
 		User user = findUserById(target.getId());
 		user.changePassword(passwordEncoder.encode(target.getPassword()));
 
+		return UserResponseDto.of(userRepository.save(user));
+	}
+
+	@Override
+	public UserResponseDto changeNickname(ModifyNicknameTarget target, AuthInfo authInfo) {
+		validUser(target.getId(), authInfo.getId());
+		User user = findUserById(target.getId());
+		user.changeNickname(target.getNickname());
 		return UserResponseDto.of(userRepository.save(user));
 	}
 
