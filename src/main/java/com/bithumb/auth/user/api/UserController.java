@@ -1,15 +1,20 @@
 package com.bithumb.auth.user.api;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bithumb.auth.common.response.ApiResponse;
 import com.bithumb.auth.common.response.StatusCode;
@@ -55,6 +60,16 @@ public class UserController {
 		userService.deleteUser(dto.toParam(id), authInfo);
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
 			SuccessCode.USER_DELETE_SUCCESS.getMessage());
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
+	@AuthRequired
+	@PostMapping("/profile/{id}")
+	public ResponseEntity<?> uploadUserProfile(@PathVariable long id, @RequestParam("images") MultipartFile multipartFile) throws
+		IOException {
+		userService.saveProfileImg(id,multipartFile);
+		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
+			SuccessCode.USER_PROFILE_UPLOAD_SUCCESS.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 

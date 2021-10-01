@@ -1,8 +1,11 @@
 package com.bithumb.auth.user.application;
 
+import java.io.IOException;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bithumb.auth.auth.repository.RefreshTokenRepository;
 import com.bithumb.auth.common.response.ErrorCode;
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RefreshTokenRepository refreshTokenRepository;
+	private final S3Uploader s3Uploader;
 
 	@Override
 	public UserResponseDto changePassword(ModifyPasswordTarget target, AuthInfo authInfo) {
@@ -50,6 +54,18 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.deleteById(target.getId());
 		refreshTokenRepository.deleteById(String.valueOf(target.getId()));
+	}
+
+	@Override
+	public void saveProfileImg(long userId, MultipartFile multipartFile) throws IOException {
+
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+
+		String userImg = s3Uploader.upload(multipartFile, user.getId());
+		userRepository.saveUserProfileImg(userId,userImg);
+
+		System.out.println(userImg);
 	}
 
 	private User findUserById(Long id) {
