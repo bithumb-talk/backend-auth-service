@@ -20,17 +20,4 @@ public class ModifyNicknameRequest {
 			.nickname(nickname)
 			.build();
 	}
-
-	/*public ModifyUserTarget toParam() {
-		return ModifyUserTarget.builder()
-			.password(password)
-			.build();
-	}*/
-
-
-
-
-
-
-
 }
