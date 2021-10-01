@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import com.bithumb.auth.common.response.StatusCode;
 import com.bithumb.auth.common.response.SuccessCode;
 import com.bithumb.auth.security.authentication.AuthInfo;
 import com.bithumb.auth.security.authentication.AuthRequired;
+import com.bithumb.auth.user.api.dto.DeleteUserRequest;
 import com.bithumb.auth.user.api.dto.ModifyNicknameRequest;
 import com.bithumb.auth.user.api.dto.ModifyPasswordRequest;
 import com.bithumb.auth.user.api.dto.UserResponseDto;
@@ -44,6 +46,15 @@ public class UserController {
 		UserResponseDto responseDto = userService.changeNickname(dto.toParam(id), authInfo);
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
 			SuccessCode.USER_UPDATE_NICKNAME_SUCCESS.getMessage(),responseDto);
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
+	@AuthRequired
+	@DeleteMapping("/{id}/info")
+	public ResponseEntity<?> deleteUserInfo(@PathVariable long id, @Valid @RequestBody DeleteUserRequest dto, AuthInfo authInfo) {
+		userService.deleteUser(dto.toParam(id), authInfo);
+		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
+			SuccessCode.USER_DELETE_SUCCESS.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 
