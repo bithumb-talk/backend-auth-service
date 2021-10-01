@@ -3,12 +3,14 @@ package com.bithumb.auth.auth.api.dto;
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserLoginRequest {
 
     @NotBlank(message = "Input Your ID")
