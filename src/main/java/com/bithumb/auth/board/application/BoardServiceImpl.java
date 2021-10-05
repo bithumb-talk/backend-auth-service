@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.bithumb.auth.board.api.dto.CancleLikeContentRequest;
 import com.bithumb.auth.board.api.dto.CheckLikeContentRequest;
 import com.bithumb.auth.board.entity.Board;
 import com.bithumb.auth.board.repository.BoardRepository;
@@ -42,6 +43,17 @@ public class BoardServiceImpl implements BoardService {
 		boardRepository.save(board);
 	}
 
+	@Override
+	public void cancleLikeBoardContent(CancleLikeContentRequest dto) {
+		userRepository.findById(dto.getUserId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+		validUser(dto.getUserId(),dto.getAuthInfo().getId());
+
+		Board board = boardRepository.findTableNoByUserIdAndBoardId(dto.getUserId(),dto.getContentId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.LIKE_BOARD_NOT_EXIST.getMessage()));
+
+		boardRepository.delete(board);
+	}
 
 
 	private void validUser(long requestedUserId , long AuthedUserId){
