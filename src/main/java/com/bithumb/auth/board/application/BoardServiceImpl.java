@@ -11,7 +11,9 @@ import com.bithumb.auth.board.api.dto.LikeContentResponse;
 import com.bithumb.auth.board.api.dto.findUserLikeContentRequest;
 import com.bithumb.auth.board.api.dto.findUserLikeContentResponse;
 import com.bithumb.auth.board.entity.Board;
+import com.bithumb.auth.board.entity.Comment;
 import com.bithumb.auth.board.repository.BoardRepository;
+import com.bithumb.auth.board.repository.CommentRepository;
 import com.bithumb.auth.common.response.ErrorCode;
 import com.bithumb.auth.user.repository.UserRepository;
 
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardServiceImpl implements BoardService {
 
 	private final BoardRepository boardRepository;
+	private final CommentRepository commentRepository;
 	private final UserRepository userRepository;
 
 	@Override
@@ -84,6 +87,38 @@ public class BoardServiceImpl implements BoardService {
 		}
 
 		return LikeContentResponse.of("true");
+	}
+
+	@Override
+	public void checkLikeCommentContent(CheckLikeContentRequest dto) {
+		userRepository.findById(dto.getUserId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+		validUser(dto.getUserId(),dto.getAuthInfo().getId());
+
+		Boolean checkComment = commentRepository.checkAlreadyExist(dto.getUserId(), dto.getContentId());
+
+		if (checkComment == true){
+			throw new IllegalArgumentException(ErrorCode.LIKE_COMMENT_ALREADY_EXIST.getMessage());
+		}
+
+		Comment comment = Comment.builder()
+			.userId(dto.getUserId())
+			.commnetId(dto.getContentId())
+			.build();
+
+		commentRepository.save(comment);
+	}
+
+	@Override
+	public void cancleLikeCommentContent(CancleLikeContentRequest dto) {
+		userRepository.findById(dto.getUserId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+		validUser(dto.getUserId(),dto.getAuthInfo().getId());
+
+		Comment comment = commentRepository.findTableNoByUserIdAndBoardId(dto.getUserId(),dto.getContentId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.LIKE_COMMENT_NOT_EXIST.getMessage()));
+
+		commentRepository.delete(comment);
 	}
 
 	private void validUser(long requestedUserId, long AuthedUserId) {
