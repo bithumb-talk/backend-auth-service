@@ -2,11 +2,15 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: USER
+
+
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://192.168.219.106:3306/talk5
-    username: root
-    password: root
+    url: jdbc:mariadb://youngcha-auth.crtppt0lvgk7.ap-northeast-2.rds.amazonaws.com:3306/youngcha
+    username: admin
+    password: youngcha1008
 
   jpa:
     hibernate:
@@ -16,6 +20,21 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
         show_sql: true
+
+
+logging:
+  level:
+    com.tutorial: debug
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://3.38.23.41:8761/eureka
+  instance:
+    prefer-ip-address: true
+
 
 cloud:
   aws:
@@ -29,12 +48,5 @@ cloud:
     stack:
       auto: false
 
-logging:
-  level:
-    com.tutorial: debug
-
-# HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
-# Secret 값은 특정 문자열을 Base64 로 인코딩한 값 사용 (아래 명령어를 터미널에 쳐보면 그대로 나옴)
-# $ echo 'spring-boot-security-jwt-tutorial-jiwoon-spring-boot-security-jwt-tutorial' | base64
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
