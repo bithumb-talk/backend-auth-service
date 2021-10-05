@@ -19,12 +19,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 		+ "THEN true "
 		+ "ELSE false END "
 		+ "FROM Comment b WHERE b.userId = :userId and b.commnetId = :commnetId")
-	//@Query("select EXIST (select u.tableNo from Board u where u.userId = :userId and u.boardId = :boardId)")
 	boolean checkAlreadyExist(@Param("userId") Long userId ,@Param("commnetId") Long commnetId);
 
 	@Query ("select b from Comment b WHERE b.userId = :userId and b.commnetId = :commnetId")
 	Optional<Comment> findTableNoByUserIdAndBoardId(@Param("userId") Long userId ,@Param("commnetId") Long commnetId);
 
-
+	@Query ("select b from Comment b WHERE b.userId = :userId")
+	List<Comment> findAllByUserId(@Param("userId")long userId);
 
 }
