@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 		User user = findUserById(authInfo.getId());
 
 		validUser(target.getId(), authInfo.getId());
-		validPassword(target.getPassword(),user.getPassword());
+		validPassword(target.getPassword(), user.getPassword());
 
 		userRepository.deleteById(target.getId());
 		refreshTokenRepository.deleteById(String.valueOf(target.getId()));
@@ -62,14 +62,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void saveProfileImg(long userId, MultipartFile multipartFile) throws IOException {
-
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+		User user = findUserById(userId);
 
 		String userImg = s3Uploader.upload(multipartFile, user.getId());
-		userRepository.saveUserProfileImg(userId,userImg);
-
-		System.out.println(userImg);
+		user.changeProfileUrl(userImg);
+		userRepository.save(user);
 	}
 
 	@Override
@@ -83,9 +80,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public FindUserInfoResponse getMyInfo(long userId , AuthInfo authInfo) {
-		validUser(userId , authInfo.getId());
-		User user  = userRepository.findById(SecurityUtil.getCurrentMemberId())
+	public FindUserInfoResponse getMyInfo(long userId, AuthInfo authInfo) {
+		validUser(userId, authInfo.getId());
+		User user = userRepository.findById(SecurityUtil.getCurrentMemberId())
 			.orElseThrow(() -> new RuntimeException(ErrorCode.ID_NOT_EXIST.getMessage()));
 
 		return FindUserInfoResponse.of(user);
