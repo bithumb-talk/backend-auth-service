@@ -23,4 +23,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 	@Query ("select b from Board b WHERE b.userId = :userId and b.boardId = :boardId")
 	Optional<Board> findTableNoByUserIdAndBoardId(@Param("userId") Long userId ,@Param("boardId") Long boardId);
+
+	@Query ("select b from Board b WHERE b.userId = :userId")
+	List<Board> findAllByUserId(@Param("userId")long userId);
 }
