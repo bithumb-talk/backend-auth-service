@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 public class UserController {
 	private final UserService userService;
 
@@ -51,16 +53,18 @@ public class UserController {
 
 	@AuthRequired
 	@PutMapping("/nickname/{id}")
-	public ResponseEntity<?> modifyNickname(@PathVariable long id, @Valid @RequestBody ModifyNicknameRequest dto, AuthInfo authInfo) {
+	public ResponseEntity<?> modifyNickname(@PathVariable long id, @Valid @RequestBody ModifyNicknameRequest dto,
+		AuthInfo authInfo) {
 		UserResponseDto responseDto = userService.changeNickname(dto.toParam(id), authInfo);
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
-			SuccessCode.USER_UPDATE_NICKNAME_SUCCESS.getMessage(),responseDto);
+			SuccessCode.USER_UPDATE_NICKNAME_SUCCESS.getMessage(), responseDto);
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 
 	@AuthRequired
 	@DeleteMapping("/{id}/info")
-	public ResponseEntity<?> deleteUserInfo(@PathVariable long id, @Valid @RequestBody DeleteUserRequest dto, AuthInfo authInfo) {
+	public ResponseEntity<?> deleteUserInfo(@PathVariable long id, @Valid @RequestBody DeleteUserRequest dto,
+		AuthInfo authInfo) {
 		userService.deleteUser(dto.toParam(id), authInfo);
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
 			SuccessCode.USER_DELETE_SUCCESS.getMessage());
@@ -69,9 +73,10 @@ public class UserController {
 
 	@AuthRequired
 	@PostMapping("/profile/{id}")
-	public ResponseEntity<?> uploadUserProfile(@PathVariable long id, @RequestParam("images") MultipartFile multipartFile) throws
+	public ResponseEntity<?> uploadUserProfile(@PathVariable long id,
+		@RequestParam("images") MultipartFile multipartFile) throws
 		IOException {
-		userService.saveProfileImg(id,multipartFile);
+		userService.saveProfileImg(id, multipartFile);
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
 			SuccessCode.USER_PROFILE_UPLOAD_SUCCESS.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -85,7 +90,6 @@ public class UserController {
 			SuccessCode.USER_RESAVE_DEVICE_TOKEN_SUCCESS.getMessage(), reponseDto);
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
-
 
 	@AuthRequired
 	@GetMapping("/{id}/info")
