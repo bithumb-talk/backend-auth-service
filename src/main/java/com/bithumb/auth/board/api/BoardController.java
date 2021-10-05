@@ -74,7 +74,25 @@ public class BoardController {
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 
+	@AuthRequired
+	@PostMapping("/{user-id}/like-comment-content/{comment-id}")
+	public ResponseEntity<?> checkLikeCommentContent(@PathVariable("user-id") long userId, @PathVariable("comment-id") long commnetId, AuthInfo authInfo) {
+		CheckLikeContentRequest dto = CheckLikeContentRequest.toParam(userId,commnetId,authInfo);
+		boardService.checkLikeCommentContent(dto);
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.LIKE_COMMENT_SAVE_SUCCESS.getMessage(),LikeContentResponse.of("true"));
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
 
+	@AuthRequired
+	@DeleteMapping("/{user-id}/like-comment-content/{comment-id}")
+	public ResponseEntity<?> cancleLikeCommentContent(@PathVariable("user-id") long userId, @PathVariable("comment-id") long commnetId, AuthInfo authInfo) {
+		CancleLikeContentRequest dto = CancleLikeContentRequest.toParam(userId,commnetId,authInfo);
+		boardService.cancleLikeCommentContent(dto);
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.LIKE_COMMENT_CANCLE_SUCCESS.getMessage(),LikeContentResponse.of("false"));
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
 
 
 }
