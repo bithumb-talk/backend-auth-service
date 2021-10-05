@@ -94,5 +94,27 @@ public class BoardController {
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 
+	@AuthRequired
+	@GetMapping("/{user-id}/like-comment-contents")
+	public ResponseEntity<?> findLikeCommentContentByUserId(@PathVariable("user-id") long userId, AuthInfo authInfo) {
+		findUserLikeContentRequest dto = findUserLikeContentRequest.toParam(userId,authInfo);
+		findUserLikeContentResponse boardList = boardService.findUserLikeCommentContent(dto);
+
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.FIND_LIKE_COMMENT_LIST_SUCCESS.getMessage(),boardList);
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
+
+	@AuthRequired
+	@GetMapping("/{user-id}/like-comment-content/{comment-id}")
+	public ResponseEntity<?> matchingCommentLikeContent(@PathVariable("user-id") long userId, @PathVariable("comment-id") long commnetId, AuthInfo authInfo) {
+		CheckLikeContentRequest dto = CheckLikeContentRequest.toParam(userId,commnetId,authInfo);
+		LikeContentResponse response = boardService.checkCommnetMatching(dto);
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.CHECK_LIKE_COMMENT_SUCCESS.getMessage(),response);
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
 
 }
