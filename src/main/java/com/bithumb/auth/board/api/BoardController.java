@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bithumb.auth.board.api.dto.CancleLikeContentRequest;
 import com.bithumb.auth.board.api.dto.CheckLikeContentRequest;
 import com.bithumb.auth.board.api.dto.LikeContentResponse;
+import com.bithumb.auth.board.api.dto.findUserLikeContentRequest;
+import com.bithumb.auth.board.api.dto.findUserLikeContentResponse;
 import com.bithumb.auth.board.application.BoardService;
 import com.bithumb.auth.common.response.ApiResponse;
 import com.bithumb.auth.common.response.StatusCode;
@@ -47,6 +50,27 @@ public class BoardController {
 		boardService.cancleLikeBoardContent(dto);
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
 			SuccessCode.LIKE_BOARD_CANCLE_SUCCESS.getMessage(), LikeContentResponse.of("false"));
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
+	@AuthRequired
+	@GetMapping("/{user-id}/like-board-contents")
+	public ResponseEntity<?> findLikeBoardContentByUserId(@PathVariable("user-id") long userId, AuthInfo authInfo) {
+		findUserLikeContentRequest dto = findUserLikeContentRequest.toParam(userId,authInfo);
+		findUserLikeContentResponse boardList = boardService.findUserLikeBoardContent(dto);
+
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.FIND_LIKE_BOARD_LIST_SUCCESS.getMessage(),boardList);
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
+	@AuthRequired
+	@GetMapping("/{user-id}/like-board-content/{board-id}")
+	public ResponseEntity<?> matchingBoardLikeContent(@PathVariable("user-id") long userId, @PathVariable("board-id") long boardId, AuthInfo authInfo) {
+		CheckLikeContentRequest dto = CheckLikeContentRequest.toParam(userId,boardId,authInfo);
+		LikeContentResponse response = boardService.checkBoardMatching(dto);
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.CHECK_LIKE_BOARD_SUCCESS.getMessage(),response);
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 
