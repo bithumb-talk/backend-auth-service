@@ -16,7 +16,7 @@ public interface UserService {
 	UserResponseDto changeNickname(ModifyNicknameTarget target, AuthInfo authInfo);
 	void deleteUser(DeleteUserTarget target, AuthInfo authInfo);
 	void saveProfileImg(long userId, MultipartFile multipartFile) throws IOException;
-
+	FindUserInfoResponse getMyInfo(long userId, AuthInfo aUthInfo);
 
 
 }
