@@ -93,11 +93,11 @@ public class BoardServiceImpl implements BoardService {
 	public void checkLikeCommentContent(CheckLikeContentRequest dto) {
 		userRepository.findById(dto.getUserId())
 			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
-		validUser(dto.getUserId(),dto.getAuthInfo().getId());
+		validUser(dto.getUserId(), dto.getAuthInfo().getId());
 
 		Boolean checkComment = commentRepository.checkAlreadyExist(dto.getUserId(), dto.getContentId());
 
-		if (checkComment == true){
+		if (checkComment == true) {
 			throw new IllegalArgumentException(ErrorCode.LIKE_COMMENT_ALREADY_EXIST.getMessage());
 		}
 
@@ -113,12 +113,40 @@ public class BoardServiceImpl implements BoardService {
 	public void cancleLikeCommentContent(CancleLikeContentRequest dto) {
 		userRepository.findById(dto.getUserId())
 			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
-		validUser(dto.getUserId(),dto.getAuthInfo().getId());
+		validUser(dto.getUserId(), dto.getAuthInfo().getId());
 
-		Comment comment = commentRepository.findTableNoByUserIdAndBoardId(dto.getUserId(),dto.getContentId())
+		Comment comment = commentRepository.findTableNoByUserIdAndBoardId(dto.getUserId(), dto.getContentId())
 			.orElseThrow(() -> new NullPointerException(ErrorCode.LIKE_COMMENT_NOT_EXIST.getMessage()));
 
 		commentRepository.delete(comment);
+	}
+
+	@Override
+	public findUserLikeContentResponse findUserLikeCommentContent(findUserLikeContentRequest dto) {
+		userRepository.findById(dto.getUserId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+		validUser(dto.getUserId(), dto.getAuthInfo().getId());
+
+		List<Comment> commentList = commentRepository.findAllByUserId(dto.getUserId());
+
+		List<Long> onlyCommmentId = commentList.stream().map(Comment::getCommnetId).collect(Collectors.toList());
+
+		return findUserLikeContentResponse.of(dto.getUserId(), onlyCommmentId);
+	}
+
+	@Override
+	public LikeContentResponse checkCommnetMatching(CheckLikeContentRequest dto) {
+		userRepository.findById(dto.getUserId())
+			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+		validUser(dto.getUserId(), dto.getAuthInfo().getId());
+
+		Boolean checkComment = commentRepository.checkAlreadyExist(dto.getUserId(), dto.getContentId());
+
+		if (checkComment == false) {
+			return LikeContentResponse.of("false");
+		}
+
+		return LikeContentResponse.of("true");
 	}
 
 	private void validUser(long requestedUserId, long AuthedUserId) {
