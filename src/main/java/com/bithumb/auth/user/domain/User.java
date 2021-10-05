@@ -9,14 +9,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
 @Table(name = "user")
 @Entity
+@ToString
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -37,8 +42,8 @@ public class User {
     @Column(name = "user_authority", nullable = false)
     private Authority authority;
 
-//    @OneToMany(mappedBy="user")
-//    private List<Board> boards;
+    @Column(name = "device_token", nullable = true)
+    private String deviceToken;
 
     public void changePassword(String password) {
         this.password = password;
@@ -48,14 +53,11 @@ public class User {
         this.nickname = nickname;
     }
 
-    /*
-        @Builder
-        public User(String userId, String password, Authority authority) {
-            this.userId = userId;
-            this.password = password;
-            this.authority = authority;
-        }
-    */
+    public void changeDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+
+
     @Builder
     public User(Long id, String userId, String password, String nickname,
         Authority authority) {
@@ -86,12 +88,6 @@ public class User {
             '}';
     }
 
-    /*public User of(String userId, String password, Authority authority, PasswordEncoder passwordEncoder) {
-        return User.builder()
-            .userId(userId)
-            .password(passwordEncoder.encode(password))
-            .authority(Authority.ROLE_USER)
-            .build();
-    }*/
+
 
 }
