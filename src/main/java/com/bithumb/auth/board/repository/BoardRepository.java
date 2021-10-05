@@ -21,5 +21,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 		+ "FROM Board b WHERE b.userId = :userId and b.boardId = :boardId")
 	boolean checkAlreadyExist(@Param("userId") Long userId ,@Param("boardId") Long boardId);
 
-
+	@Query ("select b from Board b WHERE b.userId = :userId and b.boardId = :boardId")
+	Optional<Board> findTableNoByUserIdAndBoardId(@Param("userId") Long userId ,@Param("boardId") Long boardId);
 }
