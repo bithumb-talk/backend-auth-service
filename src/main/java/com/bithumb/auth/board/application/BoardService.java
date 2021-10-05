@@ -13,5 +13,6 @@ public interface BoardService {
 	findUserLikeContentResponse findUserLikeBoardContent(findUserLikeContentRequest findUserLikeContentRequest);
 	LikeContentResponse checkBoardMatching(CheckLikeContentRequest checkLikeContentRequest);
 
-
+	void checkLikeCommentContent(CheckLikeContentRequest checkLikeContentRequest);
+	void cancleLikeCommentContent(CancleLikeContentRequest cancleLikeContentRequest);
 }
