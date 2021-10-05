@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -70,6 +71,15 @@ public class UserController {
 		userService.saveProfileImg(id,multipartFile);
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
 			SuccessCode.USER_PROFILE_UPLOAD_SUCCESS.getMessage());
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
+	@AuthRequired
+	@GetMapping("/{id}/info")
+	public ResponseEntity<?> findUserInfo(@PathVariable long id, AuthInfo authInfo) {
+		FindUserInfoResponse responseDto = userService.getMyInfo(id, authInfo);
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.USER_FINDMEMBER_SUCCESS.getMessage(), responseDto);
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
 
