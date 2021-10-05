@@ -23,8 +23,11 @@ import com.bithumb.auth.common.response.SuccessCode;
 import com.bithumb.auth.security.authentication.AuthInfo;
 import com.bithumb.auth.security.authentication.AuthRequired;
 import com.bithumb.auth.user.api.dto.DeleteUserRequest;
+import com.bithumb.auth.user.api.dto.FindUserInfoResponse;
 import com.bithumb.auth.user.api.dto.ModifyNicknameRequest;
 import com.bithumb.auth.user.api.dto.ModifyPasswordRequest;
+import com.bithumb.auth.user.api.dto.ReSaveDeviceTokenRequest;
+import com.bithumb.auth.user.api.dto.UserApiResponse;
 import com.bithumb.auth.user.api.dto.UserResponseDto;
 import com.bithumb.auth.user.application.UserService;
 
@@ -73,6 +76,16 @@ public class UserController {
 			SuccessCode.USER_PROFILE_UPLOAD_SUCCESS.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 	}
+
+	@AuthRequired
+	@PostMapping("/device/{id}")
+	public ResponseEntity<?> reSaveDviceToken(@PathVariable long id, @RequestBody ReSaveDeviceTokenRequest dto) {
+		UserApiResponse reponseDto = userService.saveDeviceToken(dto.toParam(id));
+		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
+			SuccessCode.USER_RESAVE_DEVICE_TOKEN_SUCCESS.getMessage(), reponseDto);
+		return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+	}
+
 
 	@AuthRequired
 	@GetMapping("/{id}/info")
