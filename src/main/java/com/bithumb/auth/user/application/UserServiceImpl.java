@@ -2,7 +2,6 @@ package com.bithumb.auth.user.application;
 
 import java.io.IOException;
 
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +14,12 @@ import com.bithumb.auth.user.api.dto.DeleteUserTarget;
 import com.bithumb.auth.user.api.dto.FindUserInfoResponse;
 import com.bithumb.auth.user.api.dto.ModifyNicknameTarget;
 import com.bithumb.auth.user.api.dto.ModifyPasswordTarget;
+import com.bithumb.auth.user.api.dto.ReSaveDeviceTokenTarget;
+import com.bithumb.auth.user.api.dto.UserApiResponse;
 import com.bithumb.auth.user.api.dto.UserResponseDto;
 import com.bithumb.auth.user.domain.User;
 import com.bithumb.auth.user.repository.UserRepository;
+import com.bithumb.auth.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,6 +70,16 @@ public class UserServiceImpl implements UserService {
 		userRepository.saveUserProfileImg(userId,userImg);
 
 		System.out.println(userImg);
+	}
+
+	@Override
+	public UserApiResponse saveDeviceToken(ReSaveDeviceTokenTarget reSaveDeviceTokenTarget) {
+		User user = findUserById(reSaveDeviceTokenTarget.getId());
+
+		user.changeDeviceToken(reSaveDeviceTokenTarget.getDeviceToken());
+		userRepository.save(user);
+
+		return UserApiResponse.of(user);
 	}
 
 	@Override
