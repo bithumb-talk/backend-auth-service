@@ -16,16 +16,15 @@ public class UserLoginRequest {
     @NotBlank(message = "Input Your ID")
     private String userId;
     @NotBlank(message = "Input Your Password")
-    //@Range(min = 5, max = 15, message = "Input Correct Password")
     private String password;
-
+    @NotBlank(message = "Input Your deviceToken")
+    private String deviceToken;
 
     public UserLoginTarget toParam() {
         return UserLoginTarget.builder()
-                .userId(userId)
-                .password(password)
-                .build();
+            .userId(userId)
+            .password(password)
+            .deviceToken(deviceToken)
+            .build();
     }
-
-
 }
