@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  app:
+    network_mode: host
+    build: .
+    restart: always
+    ports:
+      - "6000:6000"
+
+
+
+#networks:
+#  default:
+#    external:
+#      name: bithumb-backend-net
