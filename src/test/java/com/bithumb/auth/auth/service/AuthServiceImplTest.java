@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,9 +21,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.bithumb.auth.auth.api.dto.AuthApiResponse;
 import com.bithumb.auth.auth.api.dto.TokenDto;
 import com.bithumb.auth.auth.api.dto.TokenRequestDto;
-import com.bithumb.auth.auth.api.dto.TokenResponseDto;
 import com.bithumb.auth.auth.api.dto.UserLoginTarget;
 import com.bithumb.auth.auth.api.dto.UserSignUpTarget;
 import com.bithumb.auth.auth.application.AuthServiceImpl;
@@ -101,7 +99,7 @@ class AuthServiceImplTest {
 		.build();
 
 	//dto
-	TokenResponseDto resultInput = TokenResponseDto.builder()
+	AuthApiResponse resultInput = AuthApiResponse.builder()
 		.id(1l)
 		.grantType("bearer")
 		.accessToken(
@@ -110,6 +108,8 @@ class AuthServiceImplTest {
 			"eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzI1MDE4MjR9.ZiWYYiaIElyvaLY8T0YXBqKM5GX-H-2hfFNR0-emaYMmuaigUM15xW6Gpo84530zNksbaVviagj5EDr9FsoC9Q")
 		.accessTokenExpiresIn(604800l)
 		.build();
+
+	private GrantedAuthority user1;
 
 	@BeforeEach
 	void setUp() {
@@ -162,7 +162,7 @@ class AuthServiceImplTest {
 		given(authenticationManagerBuilder.getObject().authenticate(authentication));
 
 		// when
-		TokenResponseDto resultOutput = authService.login(loginTarget);
+		AuthApiResponse resultOutput = authService.login(loginTarget);
 
 		// then
 		assertThat(resultInput, is(resultOutput));
@@ -174,7 +174,6 @@ class AuthServiceImplTest {
 
 	}
 
-
 	@Test
 	@DisplayName("실패테스트 - 로그인 아이디 존재x")
 	void loginUserIdNotExist() {
@@ -183,7 +182,6 @@ class AuthServiceImplTest {
 		// then
 		assertThrows(NullPointerException.class, () -> authService.login(loginTarget));
 	}
-
 
 	@Test
 	@DisplayName("성공테스트 - 토큰 재발급")
@@ -198,7 +196,7 @@ class AuthServiceImplTest {
 		given(refreshTokenRepository.save(any())).willReturn(refreshToken);
 
 		// when
-		TokenResponseDto resultOutput = authService.reissue(tokenRequestDto);
+		AuthApiResponse resultOutput = authService.reissue(tokenRequestDto);
 
 		// then
 		assertThat(resultInput, is(resultOutput));

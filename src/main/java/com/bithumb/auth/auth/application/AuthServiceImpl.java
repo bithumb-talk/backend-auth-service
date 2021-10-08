@@ -8,9 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bithumb.auth.auth.api.dto.AuthApiResponse;
 import com.bithumb.auth.auth.api.dto.TokenDto;
 import com.bithumb.auth.auth.api.dto.TokenRequestDto;
-import com.bithumb.auth.auth.api.dto.TokenResponseDto;
 import com.bithumb.auth.auth.api.dto.UserLoginTarget;
 import com.bithumb.auth.auth.api.dto.UserSignUpTarget;
 import com.bithumb.auth.auth.domain.RefreshToken;
@@ -38,6 +38,7 @@ public class AuthServiceImpl implements AuthService{
         if (userRepository.existsByUserId(userSignUpTarget.getUserId())) {
             throw new DuplicateKeyException(ErrorCode.ID_ALREADY_EXIST.getMessage());
         }
+
         if (userRepository.existsByNickname(userSignUpTarget.getNickname())) {
             throw new DuplicateKeyException(ErrorCode.NICKNAME_ALREADY_EXIST.getMessage());
         }
@@ -47,33 +48,36 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public TokenResponseDto login(UserLoginTarget userLoginTarget) {
+    public AuthApiResponse login(UserLoginTarget userLoginTarget) {
 
-        //User dtoUser = userLoginTarget.toEntity(passwordEncoder);
         User user = userRepository.findByUserId(userLoginTarget.getUserId())
             .orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
+        user.changeDeviceToken(userLoginTarget.getDeviceToken());
 
         UsernamePasswordAuthenticationToken authenticationToken = userLoginTarget.toAuthentication();
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .refreshKey(authentication.getName())
-                .refreshValue(tokenDto.getRefreshToken())
-                .build();
+            .refreshKey(authentication.getName())
+            .refreshValue(tokenDto.getRefreshToken())
+            .build();
 
         refreshTokenRepository.save(refreshToken);
-        return TokenResponseDto.of(user.getId(),tokenDto);
+        return AuthApiResponse.of(user,tokenDto);
     }
 
     @Override
-    public TokenResponseDto reissue(TokenRequestDto tokenRequestDto) {
+    public AuthApiResponse reissue(TokenRequestDto tokenRequestDto) {
 
         if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException(ErrorCode.REFRESH_TOKEN_IS_NOT_VALID.getMessage());
         }
 
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        User user = userRepository.findById(Long.parseLong(authentication.getName()))
+            .orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
         RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
             .orElseThrow(() -> new RuntimeException(ErrorCode.ALREADY_LOGOUT.getMessage()));
 
@@ -84,14 +88,9 @@ public class AuthServiceImpl implements AuthService{
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
-        long id = Long.parseLong(authentication.getName());
 
-        return TokenResponseDto.of(id,tokenDto);
-    }
 
-    @Override
-    public boolean checkDuplicateUserId(String userId){
-        return userRepository.existsByUserId(userId);
+        return AuthApiResponse.of(user,tokenDto);
     }
 
     @Override
@@ -99,4 +98,8 @@ public class AuthServiceImpl implements AuthService{
         return userRepository.existsByNickname(nickname);
     }
 
+    @Override
+    public boolean checkDuplicateUserId(String userId){
+        return userRepository.existsByUserId(userId);
+    }
 }
