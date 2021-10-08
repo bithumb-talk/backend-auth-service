@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 public class UserController {
 	private final UserService userService;
 
@@ -74,8 +73,7 @@ public class UserController {
 	@AuthRequired
 	@PostMapping("/profile/{id}")
 	public ResponseEntity<?> uploadUserProfile(@PathVariable long id,
-		@RequestParam("images") MultipartFile multipartFile) throws
-		IOException {
+		@RequestParam("images") MultipartFile multipartFile) throws IOException {
 		userService.saveProfileImg(id, multipartFile);
 		ApiResponse apiResponse = ApiResponse.responseMessage(StatusCode.SUCCESS,
 			SuccessCode.USER_PROFILE_UPLOAD_SUCCESS.getMessage());

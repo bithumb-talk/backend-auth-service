@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
 		String userImg = s3Uploader.upload(multipartFile, user.getId());
 		user.changeProfileUrl(userImg);
 		userRepository.save(user);
+
 	}
 
 	@Override
@@ -79,6 +80,7 @@ public class UserServiceImpl implements UserService {
 		return UserApiResponse.of(user);
 	}
 
+	// 현재 SecurityContext 에 있는 유저 정보 가져오기
 	@Override
 	public FindUserInfoResponse getMyInfo(long userId, AuthInfo authInfo) {
 		validUser(userId, authInfo.getId());
@@ -103,6 +105,5 @@ public class UserServiceImpl implements UserService {
 		if (!passwordEncoder.matches(requestPassword, encodedPassword)) {
 			throw new SecurityException(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
 		}
-
 	}
 }
