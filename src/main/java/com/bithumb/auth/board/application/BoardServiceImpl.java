@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.bithumb.auth.board.api.dto.CancleLikeContentRequest;
 import com.bithumb.auth.board.api.dto.CheckLikeContentRequest;
 import com.bithumb.auth.board.api.dto.LikeContentResponse;
-import com.bithumb.auth.board.api.dto.findUserLikeContentRequest;
-import com.bithumb.auth.board.api.dto.findUserLikeContentResponse;
+import com.bithumb.auth.board.api.dto.FindUserLikeContentRequest;
+import com.bithumb.auth.board.api.dto.FindUserLikeContentResponse;
 import com.bithumb.auth.board.entity.Board;
 import com.bithumb.auth.board.entity.Comment;
 import com.bithumb.auth.board.repository.BoardRepository;
@@ -61,7 +61,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public findUserLikeContentResponse findUserLikeBoardContent(findUserLikeContentRequest dto) {
+	public FindUserLikeContentResponse findUserLikeBoardContent(FindUserLikeContentRequest dto) {
 		userRepository.findById(dto.getUserId())
 			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
 		validUser(dto.getUserId(), dto.getAuthInfo().getId());
@@ -71,7 +71,7 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println(boardList);
 		List<Long> onlyBoardId = boardList.stream().map(Board::getBoardId).collect(Collectors.toList());
 
-		return findUserLikeContentResponse.of(dto.getUserId(), onlyBoardId);
+		return FindUserLikeContentResponse.of(dto.getUserId(), onlyBoardId);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public findUserLikeContentResponse findUserLikeCommentContent(findUserLikeContentRequest dto) {
+	public FindUserLikeContentResponse findUserLikeCommentContent(FindUserLikeContentRequest dto) {
 		userRepository.findById(dto.getUserId())
 			.orElseThrow(() -> new NullPointerException(ErrorCode.ID_NOT_EXIST.getMessage()));
 		validUser(dto.getUserId(), dto.getAuthInfo().getId());
@@ -131,7 +131,7 @@ public class BoardServiceImpl implements BoardService {
 
 		List<Long> onlyCommmentId = commentList.stream().map(Comment::getCommnetId).collect(Collectors.toList());
 
-		return findUserLikeContentResponse.of(dto.getUserId(), onlyCommmentId);
+		return FindUserLikeContentResponse.of(dto.getUserId(), onlyCommmentId);
 	}
 
 	@Override
