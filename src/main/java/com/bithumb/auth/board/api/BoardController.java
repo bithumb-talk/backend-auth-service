@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bithumb.auth.board.api.dto.CancleLikeContentRequest;
 import com.bithumb.auth.board.api.dto.CheckLikeContentRequest;
 import com.bithumb.auth.board.api.dto.LikeContentResponse;
-import com.bithumb.auth.board.api.dto.findUserLikeContentRequest;
-import com.bithumb.auth.board.api.dto.findUserLikeContentResponse;
+import com.bithumb.auth.board.api.dto.FindUserLikeContentRequest;
+import com.bithumb.auth.board.api.dto.FindUserLikeContentResponse;
 import com.bithumb.auth.board.application.BoardService;
 import com.bithumb.auth.common.response.ApiResponse;
 import com.bithumb.auth.common.response.StatusCode;
@@ -27,8 +27,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user-boards")
-@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
-
 public class BoardController {
 
 	private final BoardService boardService;
@@ -56,8 +54,8 @@ public class BoardController {
 	@AuthRequired
 	@GetMapping("/{user-id}/like-board-contents")
 	public ResponseEntity<?> findLikeBoardContentByUserId(@PathVariable("user-id") long userId, AuthInfo authInfo) {
-		findUserLikeContentRequest dto = findUserLikeContentRequest.toParam(userId,authInfo);
-		findUserLikeContentResponse boardList = boardService.findUserLikeBoardContent(dto);
+		FindUserLikeContentRequest dto = FindUserLikeContentRequest.toParam(userId,authInfo);
+		FindUserLikeContentResponse boardList = boardService.findUserLikeBoardContent(dto);
 
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
 			SuccessCode.FIND_LIKE_BOARD_LIST_SUCCESS.getMessage(),boardList);
@@ -97,8 +95,8 @@ public class BoardController {
 	@AuthRequired
 	@GetMapping("/{user-id}/like-comment-contents")
 	public ResponseEntity<?> findLikeCommentContentByUserId(@PathVariable("user-id") long userId, AuthInfo authInfo) {
-		findUserLikeContentRequest dto = findUserLikeContentRequest.toParam(userId,authInfo);
-		findUserLikeContentResponse boardList = boardService.findUserLikeCommentContent(dto);
+		FindUserLikeContentRequest dto = FindUserLikeContentRequest.toParam(userId,authInfo);
+		FindUserLikeContentResponse boardList = boardService.findUserLikeCommentContent(dto);
 
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
 			SuccessCode.FIND_LIKE_COMMENT_LIST_SUCCESS.getMessage(),boardList);
