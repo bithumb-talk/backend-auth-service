@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class findUserLikeContentRequest {
+public class FindUserLikeContentRequest {
 	private long userId;
 	private AuthInfo authInfo;
 
-	public static findUserLikeContentRequest toParam(long userId, AuthInfo authInfo) {
-		return new findUserLikeContentRequest(userId,authInfo);
+	public static FindUserLikeContentRequest toParam(long userId, AuthInfo authInfo) {
+		return new FindUserLikeContentRequest(userId,authInfo);
 	}
 
 
