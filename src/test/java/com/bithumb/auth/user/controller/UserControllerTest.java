@@ -40,7 +40,7 @@ class UserControllerTest {
 	//dto
 	final DeleteUserRequest deleteUserRequest = new DeleteUserRequest("bithumb10");
 	//token
-	String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzM5MzI2Nzh9.8RVu9jJBf1NIWztsJ4-bbUy4WfVoXcAg31fW8IqYXMrTDkg1kBgo_cauHOk5ftlFWVkTPeg7NXiX7Sv0hpW81g";
+	String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYzMzk2NTg2NH0.DFVnvXWU5AwS-kHZD8XNwvPi9mCdIaFpeAIufJlykurzvuefGAyYLb0c6XEs9MHC3EMF1SVxpXEHgqTf73sq1Q";
 
 	@BeforeEach
 	void setUp() {
@@ -50,7 +50,7 @@ class UserControllerTest {
 	void modifyPassword() throws Exception {
 		String json = objectMapper.writeValueAsString(modifyPasswordRequest);
 
-		mockMvc.perform(put("/users/password/11")
+		mockMvc.perform(put("/users/password/6")
 			.header("Authorization",accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(json))
@@ -63,7 +63,7 @@ class UserControllerTest {
 	void modifyNickname() throws Exception {
 		String json = objectMapper.writeValueAsString(modifyNicknameRequest);
 
-		mockMvc.perform(put("/users/nickname/11")
+		mockMvc.perform(put("/users/nickname/6")
 			.header("Authorization",accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(json))
@@ -76,7 +76,7 @@ class UserControllerTest {
 	void deleteUserInfo() throws Exception {
 		String json = objectMapper.writeValueAsString(deleteUserRequest);
 
-		mockMvc.perform(delete("/users/11/info")
+		mockMvc.perform(delete("/users/6/info")
 			.header("Authorization",accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(json))
