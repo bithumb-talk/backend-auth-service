@@ -26,7 +26,6 @@ public class AuthApiResponse {
   private String refreshToken;
   private Long accessTokenExpiresIn;
 
-
   @Builder
   public AuthApiResponse(long id, String userId, String nickname, String profileUrl, String deviceToken,
       String grantType, String accessToken, String refreshToken, Long accessTokenExpiresIn) {

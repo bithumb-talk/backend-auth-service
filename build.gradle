@@ -33,6 +33,14 @@ dependencies {
 	// eureka
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '3.0.4'
 
+
+	// 로깅
+	//https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+	implementation 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'ch.qos.logback:logback-core:1.2.3'
+	//https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+	testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'
