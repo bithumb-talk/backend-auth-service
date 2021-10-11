@@ -46,13 +46,12 @@ class AuthControllerTest {
 		.build();
 
 
-
 	//dto
 	TokenRequestDto tokenRequestDto = TokenRequestDto.builder()
-		.accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzM5MzI2Nzh9.8RVu9jJBf1NIWztsJ4-bbUy4WfVoXcAg31fW8IqYXMrTDkg1kBgo_cauHOk5ftlFWVkTPeg7NXiX7Sv0hpW81g")
-		.refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzQ1MzU2Nzh9.IJRdnnsbBubsFHEtYo0ErHh0fZiUSl75pvRUK8lZlM8UEVWePtkIUjqB2dpnwDrYRbspAi2y51Ss2AAlFfuSHw")
+		.accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYzMzk2NTg2NH0.DFVnvXWU5AwS-kHZD8XNwvPi9mCdIaFpeAIufJlykurzvuefGAyYLb0c6XEs9MHC3EMF1SVxpXEHgqTf73sq1Q")
+		.refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzQ1Njg4NjR9.XfEE0NQzBXruABnHvszC6UOV8Q9ZrY0oBqztvgwl4TSYTo4nDBvDBOBQGPP95R8akRJ9Brh5Y7heqP5c0-DLNA")
 		.build();
-	String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzM5MzI2Nzh9.8RVu9jJBf1NIWztsJ4-bbUy4WfVoXcAg31fW8IqYXMrTDkg1kBgo_cauHOk5ftlFWVkTPeg7NXiX7Sv0hpW81g";
+	String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYzMzk2NTg2NH0.DFVnvXWU5AwS-kHZD8XNwvPi9mCdIaFpeAIufJlykurzvuefGAyYLb0c6XEs9MHC3EMF1SVxpXEHgqTf73sq1Q";
 
 	/**
 	 * Controller는 굳이 설명할 필요가 없을것 같다.
