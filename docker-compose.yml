@@ -81,3 +81,8 @@ services:
 #  elastic:
 #    driver: bridge
 
+#
+#  -javaagent:C:\bithumb/elastic-apm-agent-1.26.0.jar
+#  -Delastic.apm.service_name=board-service
+#  -Delastic.apm.server_url=http://localhost:8200
+#  -Delastic.apm.application_packages=com.service.order

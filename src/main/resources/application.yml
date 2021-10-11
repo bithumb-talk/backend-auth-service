@@ -4,11 +4,12 @@ server:
 spring:
   application:
     name: USER
-
+  profiles:
+    active: dev
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://youngcha-auth.crtppt0lvgk7.ap-northeast-2.rds.amazonaws.com:3306/youngcha
+    url: jdbc:mariadb://youngcha-auth-product.crtppt0lvgk7.ap-northeast-2.rds.amazonaws.com:3306/youngcha
     username: admin
     password: youngcha1008
 

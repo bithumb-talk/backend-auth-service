@@ -42,14 +42,17 @@ class AuthControllerTest {
 	UserLoginRequest userLoginRequest = UserLoginRequest.builder()
 		.userId("bithumb10")
 		.password("bithumb10")
+		.deviceToken("aaa")
 		.build();
+
+
 
 	//dto
 	TokenRequestDto tokenRequestDto = TokenRequestDto.builder()
-		.accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMiIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzI0ODcxODh9.CF1-S3iLIV7cauMTtTJop6_Dyt9Y1RYBV2e_b7L26ecCKyLC2IwigIPGnBJnfn0pWtQPP1-nT0uKalPB2mKksw")
-		.refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzMwOTAxODh9.yPQxPYMaMizS9pew2VGD2q-J0_O8vBR_RR3wPznCkO9DEJOZLazjjI1qrOB6qQ5413EpBdKipe8sEpuhpxvv9w")
+		.accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzM5MzI2Nzh9.8RVu9jJBf1NIWztsJ4-bbUy4WfVoXcAg31fW8IqYXMrTDkg1kBgo_cauHOk5ftlFWVkTPeg7NXiX7Sv0hpW81g")
+		.refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzQ1MzU2Nzh9.IJRdnnsbBubsFHEtYo0ErHh0fZiUSl75pvRUK8lZlM8UEVWePtkIUjqB2dpnwDrYRbspAi2y51Ss2AAlFfuSHw")
 		.build();
-	String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMiIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzI0ODcxODh9.CF1-S3iLIV7cauMTtTJop6_Dyt9Y1RYBV2e_b7L26ecCKyLC2IwigIPGnBJnfn0pWtQPP1-nT0uKalPB2mKksw";
+	String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MzM5MzI2Nzh9.8RVu9jJBf1NIWztsJ4-bbUy4WfVoXcAg31fW8IqYXMrTDkg1kBgo_cauHOk5ftlFWVkTPeg7NXiX7Sv0hpW81g";
 
 	/**
 	 * Controller는 굳이 설명할 필요가 없을것 같다.
@@ -94,7 +97,7 @@ class AuthControllerTest {
 		String json = objectMapper.writeValueAsString(userLoginRequest);
 
 		mockMvc.perform(post("/auth/login")
-			.header("Authorization",accessToken)
+			//.header("Authorization",accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(json))
 			.andDo(print())
@@ -106,6 +109,7 @@ class AuthControllerTest {
 		String json = objectMapper.writeValueAsString(tokenRequestDto);
 
 		mockMvc.perform(post("/auth/reissue")
+			.header("Authorization",accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(json))
 			.andDo(print())

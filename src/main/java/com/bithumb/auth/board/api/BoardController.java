@@ -1,5 +1,7 @@
 package com.bithumb.auth.board.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,17 +25,21 @@ import com.bithumb.auth.security.authentication.AuthInfo;
 import com.bithumb.auth.security.authentication.AuthRequired;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user-boards")
+@Slf4j
 public class BoardController {
 
 	private final BoardService boardService;
+	private static final Logger LOGGER = LoggerFactory.getLogger(BoardController.class);
 
 	@AuthRequired
 	@PostMapping("/{user-id}/like-board-content/{board-id}")
 	public ResponseEntity<?> checkLikeBoardContent(@PathVariable("user-id") long userId, @PathVariable("board-id") long boardId, AuthInfo authInfo) {
+		LOGGER.info("좋아요 누른 게시글 넘버 {}",boardId);
 		CheckLikeContentRequest dto = CheckLikeContentRequest.toParam(userId,boardId,authInfo);
 		boardService.checkLikeBoardContent(dto);
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
