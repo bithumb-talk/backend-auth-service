@@ -39,7 +39,7 @@ public class BoardController {
 	@AuthRequired
 	@PostMapping("/{user-id}/like-board-content/{board-id}")
 	public ResponseEntity<?> checkLikeBoardContent(@PathVariable("user-id") long userId, @PathVariable("board-id") long boardId, AuthInfo authInfo) {
-		LOGGER.info("좋아요 누른 게시글 넘버 {}",boardId);
+		LOGGER.info("좋아요 누른 게시글 넘버 {}.",boardId);
 		CheckLikeContentRequest dto = CheckLikeContentRequest.toParam(userId,boardId,authInfo);
 		boardService.checkLikeBoardContent(dto);
 		ApiResponse apiResponse = ApiResponse.responseData(StatusCode.SUCCESS,
