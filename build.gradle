@@ -2,7 +2,9 @@ plugins {
 	id 'org.springframework.boot' version '2.5.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	//id "org.sonarqube" version "2.7"
 }
+
 
 group = 'com.bithumb.'
 version = '0.0.1-SNAPSHOT'
@@ -17,6 +19,7 @@ configurations {
 repositories {
 	mavenCentral()
 }
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
