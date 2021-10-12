@@ -5,4 +5,4 @@ ADD ${JAR_FILE} app.jar
 COPY ./elastic-apm-agent-*.jar /elastic-apm-agent.jar
 EXPOSE 6000
 ENTRYPOINT java -server -Djava.security.egd=file:/dev/./uradom ${JAVA_OPTIONS} -jar /app.jar
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./uradom","${JAVA_OPTIONS}","-jar","/app.jar"]
+##ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./uradom","${JAVA_OPTIONS}","-jar","/app.jar"]
