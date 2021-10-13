@@ -39,9 +39,9 @@ eureka:
 
 cloud:
   aws:
-    credentials:
-      accessKey: AKIA2SJCWGIOHZXVYN5I
-      secretKey: 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
+#    credentials:
+#      accessKey: AKIA2SJCWGIOHZXVYN5I
+#      secretKey: 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
     s3:
       bucket: youngcha-auth-service
     region:
